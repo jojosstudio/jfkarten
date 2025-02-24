@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feuerwehrkarten</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .card-container {
+            perspective: 1000px;
+            display: inline-block;
+        }
+        .card {
+            width: 350px;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        .card .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(255, 69, 0, 0.3);
+        }
+        .card .front {
+            background: linear-gradient(135deg, #ff4500, #8b0000);
+        }
+        .card .back {
+            background: linear-gradient(135deg, #006400, #228B22);
+            transform: rotateY(180deg);
+        }
+        h2, p {
+            margin: 10px 0;
+        }
+        select {
+            padding: 10px;
+            margin-bottom: 20px;
+            background: #1e1e1e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Feuerwehr-Karten</h1>
+    <label for="cardSelector">Wähle eine Karte:</label>
+    <select id="cardSelector" onchange="updateCard()"></select>
+    
+    <div class="card-container" onclick="flipCard()">
+        <div class="card" id="cardDisplay">
+            <div class="card-face front">
+                <h2 id="cardNumber">Karte 1</h2>
+                <p><strong>Brandklasse:</strong> <span id="brandClass">A</span></p>
+                <p><strong>Verbotene Gegenstände:</strong> <span id="forbiddenItems">Schaum, Wasser, Pulver</span></p>
+            </div>
+            <div class="card-face back">
+                <h2>Lösung</h2>
+                <p><strong>Geeignetes Löschmittel:</strong> <span id="solution">Feuerlöscher</span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Liste mit den Karten und deren Eigenschaften
+        const cards = [
+            { number: 1, brandClass: 'A', forbidden: 'Schaum, Wasser, Pulver', solution: 'Sand' },
+            { number: 2, brandClass: 'A', forbidden: 'Wasser, Sand, CO₂', solution: 'Pulver' },
+            { number: 3, brandClass: 'A', forbidden: 'Pulver, Wasser, Metall-Löscher', solution: 'CO₂' },
+            { number: 4, brandClass: 'B', forbidden: 'Wasser, Sand, Schaum', solution: 'CO₂' },
+            { number: 5, brandClass: 'B', forbidden: 'Wasser, Schaum, CO₂', solution: 'Pulver' },
+            { number: 6, brandClass: 'B', forbidden: 'Wasser, Sand, Pulver', solution: 'CO₂' },
+            { number: 7, brandClass: 'C', forbidden: 'Wasser, Schaum, Pulver', solution: 'CO₂' },
+            { number: 8, brandClass: 'C', forbidden: 'Wasser, CO₂, Metall-Löscher', solution: 'Pulver' },
+            { number: 9, brandClass: 'C', forbidden: 'Wasser, Pulver, Sand', solution: 'CO₂' },
+            { number: 10, brandClass: 'D', forbidden: 'Wasser, Schaum, CO₂', solution: 'Speziallöscher' }
+        ];
+
+        const selectElement = document.getElementById("cardSelector");
+        const cardNumber = document.getElementById("cardNumber");
+        const brandClass = document.getElementById("brandClass");
+        const forbiddenItems = document.getElementById("forbiddenItems");
+        const solution = document.getElementById("solution");
+        const cardDisplay = document.getElementById("cardDisplay");
+
+        // Füllt das Dropdown-Menü mit den Kartennummern
+        cards.forEach(card => {
+            let option = document.createElement("option");
+            option.value = card.number;
+            option.textContent = "Karte " + card.number;
+            selectElement.appendChild(option);
+        });
+
+        // Aktualisiert die angezeigte Karte basierend auf der Auswahl
+        function updateCard() {
+            let selectedCard = cards[selectElement.value - 1];
+            cardNumber.textContent = "Karte " + selectedCard.number;
+            brandClass.textContent = selectedCard.brandClass;
+            forbiddenItems.textContent = selectedCard.forbidden;
+            solution.textContent = selectedCard.solution;
+            cardDisplay.classList.remove("flipped"); // Setzt die Karte zurück auf die Vorderseite
+        }
+
+        // Dreht die Karte um, wenn sie angeklickt wird
+        function flipCard() {
+            cardDisplay.classList.toggle("flipped");
+        }
+    </script>
+</body>
+</html>
