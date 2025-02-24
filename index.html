@@ -78,19 +78,17 @@
     </div>
 
     <script>
-        // Liste mit den Karten und deren Eigenschaften
-        const cards = [
-            { number: 1, brandClass: 'A', forbidden: 'Schaum, Wasser, Pulver', solution: 'Sand' },
-            { number: 2, brandClass: 'A', forbidden: 'Wasser, Sand, CO₂', solution: 'Pulver' },
-            { number: 3, brandClass: 'A', forbidden: 'Pulver, Wasser, Metall-Löscher', solution: 'CO₂' },
-            { number: 4, brandClass: 'B', forbidden: 'Wasser, Sand, Schaum', solution: 'CO₂' },
-            { number: 5, brandClass: 'B', forbidden: 'Wasser, Schaum, CO₂', solution: 'Pulver' },
-            { number: 6, brandClass: 'B', forbidden: 'Wasser, Sand, Pulver', solution: 'CO₂' },
-            { number: 7, brandClass: 'C', forbidden: 'Wasser, Schaum, Pulver', solution: 'CO₂' },
-            { number: 8, brandClass: 'C', forbidden: 'Wasser, CO₂, Metall-Löscher', solution: 'Pulver' },
-            { number: 9, brandClass: 'C', forbidden: 'Wasser, Pulver, Sand', solution: 'CO₂' },
-            { number: 10, brandClass: 'D', forbidden: 'Wasser, Schaum, CO₂', solution: 'Speziallöscher' }
-        ];
+        const cards = [];
+        const brandClasses = ['A', 'B', 'C', 'D', 'E', 'F'];
+        const forbiddenItemsList = ['Schaum', 'Wasser', 'Pulver', 'CO₂', 'Sand', 'Metall-Löscher'];
+        const solutions = ['Feuerlöscher', 'Pulver', 'CO₂', 'Schaum', 'Wasser', 'Speziallöscher', 'Sand'];
+
+        for (let i = 1; i <= 30; i++) {
+            let brandClass = brandClasses[Math.floor(Math.random() * brandClasses.length)];
+            let forbidden = forbiddenItemsList.sort(() => 0.5 - Math.random()).slice(0, 3).join(', ');
+            let solution = solutions[Math.floor(Math.random() * solutions.length)];
+            cards.push({ number: i, brandClass, forbidden, solution });
+        }
 
         const selectElement = document.getElementById("cardSelector");
         const cardNumber = document.getElementById("cardNumber");
@@ -99,7 +97,6 @@
         const solution = document.getElementById("solution");
         const cardDisplay = document.getElementById("cardDisplay");
 
-        // Füllt das Dropdown-Menü mit den Kartennummern
         cards.forEach(card => {
             let option = document.createElement("option");
             option.value = card.number;
@@ -107,17 +104,15 @@
             selectElement.appendChild(option);
         });
 
-        // Aktualisiert die angezeigte Karte basierend auf der Auswahl
         function updateCard() {
             let selectedCard = cards[selectElement.value - 1];
             cardNumber.textContent = "Karte " + selectedCard.number;
             brandClass.textContent = selectedCard.brandClass;
             forbiddenItems.textContent = selectedCard.forbidden;
             solution.textContent = selectedCard.solution;
-            cardDisplay.classList.remove("flipped"); // Setzt die Karte zurück auf die Vorderseite
+            cardDisplay.classList.remove("flipped");
         }
 
-        // Dreht die Karte um, wenn sie angeklickt wird
         function flipCard() {
             cardDisplay.classList.toggle("flipped");
         }
